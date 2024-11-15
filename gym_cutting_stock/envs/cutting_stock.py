@@ -31,6 +31,8 @@ class CuttingStockEnv(gym.Env):
         self.max_product_per_type = max_product_per_type
         self.cutted_stocks = np.full((num_stocks,), fill_value=0, dtype=int)
 
+        np.random.seed(self.seed)
+
         # Stocks space
         upper = np.full(
             shape=(max_w, max_h), fill_value=max_product_type + 2, dtype=int
@@ -98,7 +100,17 @@ class CuttingStockEnv(gym.Env):
         return {"stocks": self._stocks, "products": self._products}
 
     def _get_info(self):
-        return {"filled_ratio": np.mean(self.cutted_stocks).item()}
+        total_product_area = 0
+        total_stock_area = 0
+        for stock_idx, stock in enumerate(self._stocks):
+            if self.cutted_stocks[stock_idx]:
+                total_area = np.sum(stock != -2)
+                product_area = np.sum(stock >= 0)
+                total_product_area += product_area
+                total_stock_area += total_area
+        filled_ratio = total_product_area / total_stock_area if total_stock_area > 0 else 0
+        return {"filled_ratio": filled_ratio}
+
 
     def reset(self, seed=None, options=None):
         # We need the following line to seed self.np_random

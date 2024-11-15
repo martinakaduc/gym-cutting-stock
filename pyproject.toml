@@ -4,14 +4,19 @@ build-backend = "hatchling.build"
 
 [project]
 name = "gym_cutting_stock"
-version = "0.0.1"
+version = "0.0.2"
 authors = [
   { name="Martin Nguyen", email="nqduc@cs.stanford.edu" },
 ]
 description = "A package for Cutting Stock Environment"
 readme = "README.md"
 requires-python = ">=3.8"
-dynamic = ["dependencies"]
+dependencies = [
+    "gymnasium",
+    "pygame", 
+    "numpy",
+    "matplotlib"
+]
 
 [project.urls]
 Homepage = "https://github.com/martinakaduc/gym_cutting_stock"
